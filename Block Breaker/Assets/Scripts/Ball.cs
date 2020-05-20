@@ -7,17 +7,22 @@ public class Ball : MonoBehaviour
 {
     //configuration parameter
     [SerializeField] Paddle paddle1; //telling the ball what Paddle object to look for
-    [SerializeField] float x_Velocity = 2f;
-    [SerializeField] float y_Velocity = 15f;
+    [SerializeField] float x_Velocity = 2f;//Where and how fast the ball will launch along the x-axis
+    [SerializeField] float y_Velocity = 15f;//Where and how fast the ball will launch along the y-axis
+    [SerializeField] AudioClip[] ballSounds; //An array containing all sounds the ball makes on compact
 
     //state
     Vector2 paddleToBallVector; //the distance between the paddle and ball (comparing their mid-point)
     bool ballHasBeenLaunched = false;
 
+    //Cached Component References
+    AudioSource myAudioSource;
+
     // Start is called before the first frame update
     void Start()
     {
         paddleToBallVector = transform.position - paddle1.transform.position; //at the beginning of the game, it figures out what the distance between the ball and paddle is
+        myAudioSource = GetComponent<AudioSource>();//Grab the audio component from the ball at the start of the game
 
     }
 
@@ -56,11 +61,12 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        //Need to first get the component that we want, which is audio, then whenever collision happens, play that audio source, only when game has been started
+        //Whenever collision happens, play that audio source all the way without getting interrupted by another collision only when game has been started
         if (ballHasBeenLaunched)
         {
-            GetComponent<AudioSource>().Play();
+            AudioClip clip = ballSounds[UnityEngine.Random.Range(0, ballSounds.Length)];//Have to add UnityEngine, cause it doesn't know if to use Unity random or System random
+            myAudioSource.PlayOneShot(clip);
         }
-        //GetComponent<AudioSource>().Play();
+        
     }
 }

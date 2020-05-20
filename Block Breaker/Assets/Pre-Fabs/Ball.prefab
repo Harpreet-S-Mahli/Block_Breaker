@@ -135,6 +135,10 @@ MonoBehaviour:
   paddle1: {fileID: 0}
   x_Velocity: 2
   y_Velocity: 15
+  ballSounds:
+  - {fileID: 8300000, guid: 2068925acddd8bd47b5be327fcbd5e2d, type: 3}
+  - {fileID: 8300000, guid: 45f0b346bdb70c1459474eab5491e890, type: 3}
+  - {fileID: 8300000, guid: e2366a20e9c12d449b2c1ac92c76705a, type: 3}
 --- !u!82 &82598661155987390
 AudioSource:
   m_ObjectHideFlags: 0
