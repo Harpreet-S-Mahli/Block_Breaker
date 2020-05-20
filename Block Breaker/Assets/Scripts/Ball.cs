@@ -53,4 +53,14 @@ public class Ball : MonoBehaviour
         //now the new position of the ball will calculte where the paddle is plus the distance that is between the paddle and the ball, resulting in the ball following the paddle
         transform.position = paddlePos + paddleToBallVector;
     }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        //Need to first get the component that we want, which is audio, then whenever collision happens, play that audio source, only when game has been started
+        if (ballHasBeenLaunched)
+        {
+            GetComponent<AudioSource>().Play();
+        }
+        //GetComponent<AudioSource>().Play();
+    }
 }
