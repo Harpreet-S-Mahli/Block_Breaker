@@ -13,6 +13,20 @@ public class GameStatus : MonoBehaviour
     // state variables
     [SerializeField] int currentScore = 0;
 
+    private void Awake()//Implementing the singleton patten method on Awake()
+    {
+        int gameStatusCount = FindObjectsOfType<GameStatus>().Length; //This one finds HOW MANY of this object there are, different from the other as that one is finding a specific object
+        if(gameStatusCount > 1)//if there is more than one, that indiciates that the current GameStatus is not the FIRST one to be created
+        {
+            gameObject.SetActive(false);//Disables most of the script execution flow in Unity, cause Destroy(gameObject) is the last thing to be exectued in the flow
+            Destroy(gameObject);
+        }
+        else
+        {
+            DontDestroyOnLoad(gameObject);//if there isn't any other gameStauts, DON'T destroy when loading up
+        }
+    }
+
     private void Start()
     {
         scoreText.text = currentScore.ToString();
@@ -24,6 +38,8 @@ public class GameStatus : MonoBehaviour
     {
         Time.timeScale = gameSpeed; //will alter how fast the game will run
     }
+
+    //When a block is destroyed, update the total score
 
     public void AddToScore()
     {
