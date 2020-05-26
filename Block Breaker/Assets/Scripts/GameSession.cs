@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class GameStatus : MonoBehaviour
+public class GameSession : MonoBehaviour
 {
     // configuration parameters
     [Range(0.1f,10f)][SerializeField] float gameSpeed = 1f; //set a range on how high and low gamespeed can be, will become a slider in the inspector
@@ -15,8 +15,8 @@ public class GameStatus : MonoBehaviour
 
     private void Awake()//Implementing the singleton patten method on Awake()
     {
-        int gameStatusCount = FindObjectsOfType<GameStatus>().Length; //This one finds HOW MANY of this object there are, different from the other as that one is finding a specific object
-        if(gameStatusCount > 1)//if there is more than one, that indiciates that the current GameStatus is not the FIRST one to be created
+        int gameStatusCount = FindObjectsOfType<GameSession>().Length; //This one finds HOW MANY of this object there are, different from the other as that one is finding a specific object
+        if(gameStatusCount > 1)//if there is more than one, that indiciates that the current GameSession is not the FIRST one to be created
         {
             gameObject.SetActive(false);//Disables most of the script execution flow in Unity, cause Destroy(gameObject) is the last thing to be exectued in the flow
             Destroy(gameObject);
@@ -45,5 +45,10 @@ public class GameStatus : MonoBehaviour
     {
         currentScore += pointPerBlockDestroyed;
         scoreText.text =  currentScore.ToString();
+    }
+
+    public void Restart() //Called from SceneLoader.cs to destroy the object so it doesn't carry the data over when the player restarts the game
+    {
+        Destroy(gameObject);
     }
 }

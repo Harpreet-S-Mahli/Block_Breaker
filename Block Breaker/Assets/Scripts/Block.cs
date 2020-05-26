@@ -8,12 +8,12 @@ public class Block : MonoBehaviour
 
     //cached reference
     Level level;
-    GameStatus gameStatus;
+    GameSession gameStatus;
 
     private void Start()
     {
         level = FindObjectOfType<Level>();//Looking for a particular thing called level, like SerializeFiled, can call methods from that game-object reference into another script 
-        gameStatus = FindObjectOfType<GameStatus>();
+        gameStatus = FindObjectOfType<GameSession>();
         level.CountBreakableBlocks(); //at the start of when a instance of a block is created, it'll call the Level method that's reference and run it
     }
     private void OnCollisionEnter2D(Collision2D collision)
