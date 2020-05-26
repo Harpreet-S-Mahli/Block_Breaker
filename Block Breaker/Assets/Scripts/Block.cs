@@ -5,6 +5,7 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     [SerializeField] AudioClip breakSound;
+    [SerializeField] GameObject blockSparklesVFX;
 
     //cached reference
     Level level;
@@ -18,11 +19,24 @@ public class Block : MonoBehaviour
     }
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        TriggerSparklesVFX();
+        DestroyBlock();
+    }
+
+    private void DestroyBlock()
+    {
         AudioSource.PlayClipAtPoint(breakSound, Camera.main.transform.position, 0.5f); //create a new audio file that'll play the sound on collision, then audio file will disappear. 
                                                                                        //where the audio file will play will be on the camera, as the distance to camera will determine how loud the sound will be, and how loud it'll be
 
         gameStatus.AddToScore();
         level.BlockisGone();//decrease the count in Level script
         Destroy(gameObject);
+    }
+
+    private void TriggerSparklesVFX()
+    {
+        GameObject sparkles = Instantiate(blockSparklesVFX, transform.position, transform.rotation);//creates a instance of the particle prefab when the fucntion is called, based on the position and rotation of Block
+        Destroy(sparkles, 1f);//get rid of the instance in the game hierachy when it's not needed after one seconds
+
     }
 }
