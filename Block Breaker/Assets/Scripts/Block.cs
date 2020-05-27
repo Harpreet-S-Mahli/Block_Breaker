@@ -1,15 +1,22 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Block : MonoBehaviour
 {
+    // configuration paramters
     [SerializeField] AudioClip breakSound;
     [SerializeField] GameObject blockSparklesVFX;
+    [SerializeField] int maxHits;
+    [SerializeField] Sprite[] hitSprites;
 
     //cached reference
     Level level;
     GameSession gameStatus;
+
+    // state variables
+    [SerializeField] int timesHit;  //TODO only serialized for debug purposes
 
     private void Start()
     {
@@ -26,11 +33,23 @@ public class Block : MonoBehaviour
     {
         if(tag == "Breakable")
         {
-            TriggerSparklesVFX();
-            DestroyBlock();
+            timesHit++;
+            if(timesHit >= maxHits)//if the right number of times to hit a block is reached, then destroy the block
+            {
+                TriggerSparklesVFX();
+                DestroyBlock();
+            }
+            else
+            {
+                ShowNextHitSprite();
+            }
         }
-        //TriggerSparklesVFX();
-       // DestroyBlock();
+    }
+
+    private void ShowNextHitSprite()//whenever the block gets hit, the next sprite to appear will be displayed based on the how many hits that blocvk can take
+    {
+        int spriteIndex = timesHit - 1;
+        GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
     }
 
     private void DestroyBlock()
