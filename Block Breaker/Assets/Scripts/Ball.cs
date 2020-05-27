@@ -10,6 +10,7 @@ public class Ball : MonoBehaviour
     [SerializeField] float x_Velocity = 2f;//Where and how fast the ball will launch along the x-axis
     [SerializeField] float y_Velocity = 15f;//Where and how fast the ball will launch along the y-axis
     [SerializeField] AudioClip[] ballSounds; //An array containing all sounds the ball makes on compact
+    [SerializeField] float randomFactor = 0.2f; //To help break out a loop incase the ball only bounces side to side or up and down with no way of getting out
 
     //state
     Vector2 paddleToBallVector; //the distance between the paddle and ball (comparing their mid-point)
@@ -17,13 +18,14 @@ public class Ball : MonoBehaviour
 
     //Cached Component References
     AudioSource myAudioSource;
+    Rigidbody2D myRigidBody2D;
 
     // Start is called before the first frame update
     void Start()
     {
         paddleToBallVector = transform.position - paddle1.transform.position; //at the beginning of the game, it figures out what the distance between the ball and paddle is
         myAudioSource = GetComponent<AudioSource>();//Grab the audio component from the ball at the start of the game
-
+        myRigidBody2D = GetComponent<Rigidbody2D>();//Grab the RigidBody2D compnent from the ball at the start of the game
     }
 
     // Update is called once per frame
@@ -44,7 +46,7 @@ public class Ball : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             ballHasBeenLaunched = true;
-            GetComponent<Rigidbody2D>().velocity = new Vector2(x_Velocity, y_Velocity);
+            myRigidBody2D .velocity = new Vector2(x_Velocity, y_Velocity);
         }
             
 
@@ -61,12 +63,15 @@ public class Ball : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        //Introduce a slight randomness so that the ball when it collides with something so that way, it won't get stuck in a endless loop
+        Vector2 velocityRandomness = new Vector2 (UnityEngine.Random.Range(0f, randomFactor), UnityEngine.Random.Range(0f, randomFactor));
+
         //Whenever collision happens, play that audio source all the way without getting interrupted by another collision only when game has been started
         if (ballHasBeenLaunched)
         {
             AudioClip clip = ballSounds[UnityEngine.Random.Range(0, ballSounds.Length)];//Have to add UnityEngine, cause it doesn't know if to use Unity random or System random
             myAudioSource.PlayOneShot(clip);
         }
-        
+        myRigidBody2D.velocity += velocityRandomness;
     }
 }

@@ -9,6 +9,7 @@ public class GameSession : MonoBehaviour
     [Range(0.1f,10f)][SerializeField] float gameSpeed = 1f; //set a range on how high and low gamespeed can be, will become a slider in the inspector
     [SerializeField] int pointPerBlockDestroyed = 5;
     [SerializeField] TextMeshProUGUI scoreText;
+    [SerializeField] bool isAutoPlayEnabled;
 
     // state variables
     [SerializeField] int currentScore = 0;
@@ -50,5 +51,11 @@ public class GameSession : MonoBehaviour
     public void Restart() //Called from SceneLoader.cs to destroy the object so it doesn't carry the data over when the player restarts the game
     {
         Destroy(gameObject);
+    }
+
+    //If the player selects autoplay in the inspector, return the variable
+    public bool IsAutoPlayEnabled()
+    {
+        return isAutoPlayEnabled;
     }
 }
