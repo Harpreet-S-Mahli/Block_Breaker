@@ -8,7 +8,6 @@ public class Block : MonoBehaviour
     // configuration paramters
     [SerializeField] AudioClip breakSound;
     [SerializeField] GameObject blockSparklesVFX;
-    [SerializeField] int maxHits;
     [SerializeField] Sprite[] hitSprites;
 
     //cached reference
@@ -34,6 +33,9 @@ public class Block : MonoBehaviour
         if(tag == "Breakable")
         {
             timesHit++;
+
+            int maxHits = hitSprites.Length + 1;//maxHits corsponds to how the length of the sprite array to display damage, so depending on the array length, maxHits is plus one to that since the array starts at zero
+
             if(timesHit >= maxHits)//if the right number of times to hit a block is reached, then destroy the block
             {
                 TriggerSparklesVFX();
@@ -46,10 +48,19 @@ public class Block : MonoBehaviour
         }
     }
 
-    private void ShowNextHitSprite()//whenever the block gets hit, the next sprite to appear will be displayed based on the how many hits that blocvk can take
+    private void ShowNextHitSprite()//whenever the block gets hit, the next sprite to appear will be displayed based on the how many hits that block can take
     {
         int spriteIndex = timesHit - 1;
-        GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+        if(hitSprites[spriteIndex]  != null)//To make sure that the array won't be thrown out of bound error
+        {
+            GetComponent<SpriteRenderer>().sprite = hitSprites[spriteIndex];
+
+        }
+        else
+        {
+            Debug.LogError("Block sprite is missing from array");
+            Debug.LogError("The block that is the problem is  " + gameObject.name);
+        }
     }
 
     private void DestroyBlock()
